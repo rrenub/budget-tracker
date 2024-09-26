@@ -1,6 +1,7 @@
 package dev.rdelgado.budgettracker.api.budgetTrackerAPI.controllers;
 
 import dev.rdelgado.budgettracker.api.budgetTrackerAPI.dtos.CategoryDto;
+import dev.rdelgado.budgettracker.api.budgetTrackerAPI.entities.Category;
 import dev.rdelgado.budgettracker.api.budgetTrackerAPI.services.CategoriesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,17 @@ public class CategoriesController {
 
     @PostMapping("/categories")
     public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto) {
-        System.out.println(categoryDto.toString());
         CategoryDto categoryCreated = categoriesService.createCategory(categoryDto);
-        System.out.println(categoryCreated.toString());
         return ResponseEntity.created(URI.create("/categories" + categoryCreated.getId())).body(categoryCreated);
+    }
+
+    @PutMapping("/categories/{id}")
+    public ResponseEntity<CategoryDto> editCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
+        return ResponseEntity.ok(categoriesService.editCategory(id, categoryDto));
+    }
+
+    @DeleteMapping("/categories/{id}")
+    public ResponseEntity<CategoryDto> deleteCategory(@PathVariable Long id) {
+        return ResponseEntity.ok(categoriesService.deleteCategory(id));
     }
 }
