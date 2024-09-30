@@ -3,12 +3,9 @@ package dev.rdelgado.budgettracker.api.budgetTrackerAPI.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table(name = "movement")
+@Data
 @ToString
 public class Movement {
 
@@ -22,4 +19,7 @@ public class Movement {
     @Column
     private Float amount;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 }

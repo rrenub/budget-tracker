@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.List;
+
 @Entity
 @Data
 @Table(name = "category")
@@ -21,4 +23,7 @@ public class Category {
 
     @Enumerated(EnumType.STRING)
     private MovementType type;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Movement> movements;
 }

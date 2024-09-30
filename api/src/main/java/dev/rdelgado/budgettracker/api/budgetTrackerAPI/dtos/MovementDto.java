@@ -15,4 +15,6 @@ public class MovementDto {
     private Long id;
     private String concept;
     private Float amount;
+    private Long categoryId; // Relation to category (ManyToOne)
+    private String categoryName;
 }

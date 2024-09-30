@@ -1,9 +1,11 @@
 package dev.rdelgado.budgettracker.api.budgetTrackerAPI.services;
 
 import dev.rdelgado.budgettracker.api.budgetTrackerAPI.dtos.MovementDto;
+import dev.rdelgado.budgettracker.api.budgetTrackerAPI.entities.Category;
 import dev.rdelgado.budgettracker.api.budgetTrackerAPI.entities.Movement;
 import dev.rdelgado.budgettracker.api.budgetTrackerAPI.exceptions.AppException;
 import dev.rdelgado.budgettracker.api.budgetTrackerAPI.mappers.MovementMapper;
+import dev.rdelgado.budgettracker.api.budgetTrackerAPI.repositories.CategoriesRepository;
 import dev.rdelgado.budgettracker.api.budgetTrackerAPI.repositories.MovementsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import java.util.List;
 public class MovementsService {
 
     private final MovementsRepository movementsRepository;
+    private final CategoriesRepository categoryRepository;
     private final MovementMapper movementMapper;
 
     public List<MovementDto> getAllMovements() {
@@ -24,7 +27,13 @@ public class MovementsService {
     }
 
     public MovementDto createMovement(MovementDto movementDto) {
+        //Find category by Id
+        Category category = categoryRepository.findById(movementDto.getCategoryId())
+                .orElseThrow(() -> new AppException("Category not found", HttpStatus.NOT_FOUND));
+
         Movement movement = movementMapper.toMovement(movementDto);
+        movement.setCategory(category);
+
         Movement createdMovement = movementsRepository.save(movement);
 
         return movementMapper.toMovementDto(createdMovement);
