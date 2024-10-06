@@ -3,6 +3,7 @@ package dev.rdelgado.budgettracker.api.budgetTrackerAPI.controllers;
 import dev.rdelgado.budgettracker.api.budgetTrackerAPI.dtos.MovementDto;
 import dev.rdelgado.budgettracker.api.budgetTrackerAPI.entities.Movement;
 import dev.rdelgado.budgettracker.api.budgetTrackerAPI.services.MovementsService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class MovementsController {
     }
 
     @PostMapping("/movements")
-    public ResponseEntity<MovementDto> createMovement(@RequestBody MovementDto movementDto) {
+    public ResponseEntity<MovementDto> createMovement(@Valid @RequestBody MovementDto movementDto) {
 
          MovementDto createdMovement = movementsService.createMovement(movementDto);
 
@@ -36,7 +37,7 @@ public class MovementsController {
     }
 
     @PutMapping("/movements/{id}")
-    public ResponseEntity<MovementDto> updateMovement(@PathVariable Long id, @RequestBody MovementDto movementDto) {
+    public ResponseEntity<MovementDto> updateMovement(@PathVariable Long id, @Valid @RequestBody MovementDto movementDto) {
         return ResponseEntity.ok(movementsService.updateMovement(id, movementDto));
     }
 }
