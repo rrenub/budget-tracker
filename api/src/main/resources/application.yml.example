@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/backend
+    username: backend_user
+    password: backend_password
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+
+budgettracker:
+  app:
+    jwtSecret: mySuperSecretKey12345 # Change this for a secure key
+    jwtExpirationMs: 86400000  # JWT lasts 24h
