@@ -11,7 +11,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -31,16 +33,15 @@ public class UserDetailsImpl implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
     public static UserDetailsImpl build(User user) {
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRoleType().name()))
-                .collect(Collectors.toList());
+        Set<GrantedAuthority> userAuthorities = new HashSet<>();
+        userAuthorities.add(new SimpleGrantedAuthority("USER"));
 
         return new UserDetailsImpl(
                     user.getId(),
                     user.getUsername(),
                     user.getEmail(),
                     user.getPassword(),
-                    authorities
+                    userAuthorities
                 );
     }
 

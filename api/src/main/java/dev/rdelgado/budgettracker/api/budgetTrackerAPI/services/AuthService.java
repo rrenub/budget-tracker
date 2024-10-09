@@ -2,10 +2,7 @@ package dev.rdelgado.budgettracker.api.budgetTrackerAPI.services;
 
 import dev.rdelgado.budgettracker.api.budgetTrackerAPI.dtos.auth.LoginResponse;
 import dev.rdelgado.budgettracker.api.budgetTrackerAPI.entities.User;
-import dev.rdelgado.budgettracker.api.budgetTrackerAPI.entities.UserRole;
-import dev.rdelgado.budgettracker.api.budgetTrackerAPI.enums.UserRoleType;
 import dev.rdelgado.budgettracker.api.budgetTrackerAPI.exceptions.AppException;
-import dev.rdelgado.budgettracker.api.budgetTrackerAPI.repositories.RolesRepository;
 import dev.rdelgado.budgettracker.api.budgetTrackerAPI.repositories.UserRepository;
 import dev.rdelgado.budgettracker.api.budgetTrackerAPI.security.UserDetailsImpl;
 import dev.rdelgado.budgettracker.api.budgetTrackerAPI.security.jwt.JwtUtils;
@@ -31,7 +28,6 @@ public class AuthService {
 
     private final UserRepository userRepository;
 
-    private final RolesRepository rolesRepository;
 
     private final PasswordEncoder encoder;
 
@@ -44,17 +40,11 @@ public class AuthService {
             throw new AppException("Username is already taken", HttpStatus.BAD_REQUEST);
         }
 
-        // Set user role as normal user
-        UserRole userRole =  rolesRepository.findByRoleType(UserRoleType.ROLE_USER)
-            .orElseThrow(() -> new AppException("Error: Role is not found.", HttpStatus.INTERNAL_SERVER_ERROR));
-        Set<UserRole> roles = new HashSet<>(Collections.singletonList(userRole));
-
         // Create user
         User user = User.builder()
                         .username(username)
                         .email(email)
                         .password(encoder.encode(password))
-                        .roles(roles)
                         .build();
 
         userRepository.save(user);
